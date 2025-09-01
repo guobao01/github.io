@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甲基化和miRNA检测试剂盒获批统计</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            padding-top: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 2.5rem 0;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.2);
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2.5rem;
+        }
+        .stats-card {
+            text-align: center;
+            padding: 1.8rem 1rem;
+        }
+        .stats-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 0.5rem;
+        }
+        .stats-label {
+            font-size: 0.95rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2.5rem;
+        }
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table th {
+            background-color: #f1f5f9;
+            color: #4f46e5;
+            font-weight: 600;
+            padding: 1rem;
+            border-top: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .table td {
+            padding: 0.9rem;
+            vertical-align: middle;
+            border-top: 1px solid #e2e8f0;
+        }
+        .table tr:hover {
+            background-color: #f8fafc;
+        }
+        .badge-cancer {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        .badge-sample {
+            background-color: #ffedd5;
+            color: #ea580c;
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        .company-name {
+            font-weight: 500;
+            color: #334155;
+        }
+        footer {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 2.5rem 0;
+            margin-top: 3.5rem;
+            border-radius: 12px 12px 0 0;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        .page-link {
+            border-radius: 8px;
+            margin: 0 4px;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            color: #4f46e5;
+        }
+        .page-item.active .page-link {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+        }
+        .form-select, .form-control {
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #cbd5e1;
+        }
+        .btn {
+            border-radius: 8px;
+            padding: 0.7rem 1.5rem;
+        }
+        .btn-outline-secondary {
+            color: #64748b;
+            border-color: #cbd5e1;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+            position: relative;
+            padding-left: 1rem;
+            border-left: 4px solid #4f46e5;
+        }
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .tooltip-cell {
+            position: relative;
+        }
+        .tooltip-cell:hover::after {
+            content: attr(data-fullname);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            z-index: 100;
+            font-size: 0.85rem;
+        }
+        .pagination-info {
+            text-align: center;
+            margin-top: 1rem;
+            color: #64748b;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.85rem;
+            }
+            .stats-number {
+                font-size: 2rem;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题区域 -->
+        <div class="header text-center">
+            <h1 class="display-5 fw-bold"><i class="bi bi-clipboard-data me-2"></i>甲基化和miRNA检测试剂盒获批统计</h1>
+            <p class="lead mb-0">截至2025年7月国家药品监督管理局批准产品信息</p>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="row">
+            <div class="col-md-3 col-6">
+                <div class="card stats-card">
+                    <div class="stats-number">44</div>
+                    <div class="stats-label">总获批产品数</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card stats-card">
+                    <div class="stats-number">12</div>
+                    <div class="stats-label">涉及癌种类型</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card stats-card">
+                    <div class="stats-number">8</div>
+                    <div class="stats-label">样本类型</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card stats-card">
+                    <div class="stats-number">18</div>
+                    <div class="stats-label">拥有审评报告</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 筛选区域 -->
+        <div class="filter-section">
+            <h5 class="section-title">数据筛选</h5>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <label for="yearFilter" class="form-label">获批年份</label>
+                    <select class="form-select" id="yearFilter">
+                        <option value="">全部年份</option>
+                        <option value="2025">2025年</option>
+                        <option value="2024">2024年</option>
+                        <option value="2023">2023年</option>
+                        <option value="2022">2022年</option>
+                        <option value="2021">2021年</option>
+                        <option value="2020">2020年</option>
+                        <option value="2019">2019年</option>
+                        <option value="2018">2018年</option>
+                        <option value="2017">2017年</option>
+                        <option value="2015">2015年</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <label for="cancerFilter" class="form-label">目标癌种</label>
+                    <select class="form-select" id="cancerFilter">
+                        <option value="">全部癌种</option>
+                        <option value="结直肠癌">结直肠癌</option>
+                        <option value="肺癌">肺癌</option>
+                        <option value="宫颈癌">宫颈癌（分流）</option>
+                        <option value="肝癌">肝癌</option>
+                        <option value="尿路上皮癌">尿路上皮癌</option>
+                        <option value="子宫内膜癌">子宫内膜癌</option>
+                        <option value="食管癌">食管癌</option>
+                        <option value="胃癌">胃癌</option>
+                        <option value="膀胱癌">膀胱癌</option>
+                        <option value="胰腺癌">胰腺癌</option>
+                        <option value="系统性红斑狼疮">系统性红斑狼疮</option>
+                        <option value="胶质瘤">胶质瘤（用药指导）</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <label for="sampleFilter" class="form-label">样本类型</label>
+                    <select class="form-select" id="sampleFilter">
+                        <option value="">全部样本类型</option>
+                        <option value="血浆">血浆</option>
+                        <option value="粪便">粪便</option>
+                        <option value="宫颈脱落细胞">宫颈脱落细胞</option>
+                        <option value="尿液">尿液</option>
+                        <option value="血清">血清</option>
+                        <option value="痰液">痰液</option>
+                        <option value="外周血">外周血</option>
+                        <option value="肺泡灌洗液">肺泡灌洗液</option>
+                        <option value="石蜡切片">石蜡切片</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <label for="companyFilter" class="form-label">公司名称</label>
+                    <input type="text" class="form-control" id="companyFilter" placeholder="输入公司名称">
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <button id="resetFilters" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-repeat me-2"></i>重置筛选
+                </button>
+                <div>
+                    <span id="resultCount" class="badge bg-primary fs-6 p-2">44</span> 条结果
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据表格 -->
+        <div class="table-container">
+            <h5 class="section-title">获批产品信息</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="50">序号</th>
+                            <th width="90">获批年月</th>
+                            <th width="280">试剂盒名称</th>
+                            <th width="180">公司名称</th>
+                            <th width="120">目标癌种</th>
+                            <th width="120">样本类型</th>
+                            <th width="120">靶标</th>
+                            <th width="80">灵敏度</th>
+                            <th width="80">特异性</th>
+                            <th width="80">准确度</th>
+                            <th width="100">审评报告</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- 数据将通过JavaScript动态加载 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分页控件 -->
+            <nav aria-label="Data pagination">
+                <ul class="pagination" id="pagination">
+                    <li class="page-item disabled" id="prevPage">
+                        <a class="page-link" href="#"><i class="bi bi-chevron-left"></i> 上一页</a>
+                    </li>
+                    <!-- 页码将通过JavaScript动态生成 -->
+                    <li class="page-item" id="nextPage">
+                        <a class="page-link" href="#">下一页 <i class="bi bi-chevron-right"></i></a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="pagination-info" id="paginationInfo">
+                显示 1-10 条，共 44 条
+            </div>
+        </div>
+
+        <!-- 图表区域 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">各癌种获批产品分布</h5>
+                        <div class="chart-container">
+                            <canvas id="cancerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">各年份获批数量</h5>
+                        <div class="chart-container">
+                            <canvas id="yearChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="text-center">
+            <p class="mb-2">甲基化和miRNA检测试剂盒获批统计 &copy; 2025</p>
+            <p class="mb-0">数据来源：国家药品监督管理局 | 最后更新：2025年7月</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // 示例数据
+        const tableData = [
+            { id: 1, date: "2025.07", name: "PCDHGB7 基因甲基化检测试剂盒（PCR-荧光探针法）", company: "上海奕谱生物科技有限公司", cancer: "宫颈癌（分流）", sample: "宫颈脱落细胞", target: "PCDHGB7", sensitivity: "", specificity: "", accuracy: "", report: "有" },
+            { id: 2, date: "2025.05", name: "人类HOXB4、SRCIN1基因甲基化检测试剂盒（荧光PCR法）", company: "广州康立明生物科技股份有限公司", cancer: "肺癌", sample: "痰液", target: "HOXB4/SRCIN1", sensitivity: "0.8282", specificity: "0.9179", accuracy: "0.8741", report: "无" },
+            { id: 3, date: "2025.04", name: "人类SDC2基因甲基化检测试剂盒（PCR-荧光探针法）", company: "武汉友芝友医疗科技股份有限公司", cancer: "结直肠癌", sample: "粪便", target: "SDC2", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 4, date: "2025.03", name: "人类Septin9、SDC2和NDRG4基因甲基化检测试剂盒（荧光PCR法）", company: "江苏健为诊断科技有限公司", cancer: "结直肠癌", sample: "粪便", target: "Septin9/SDC2/NDRG4", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 5, date: "2025.01", name: "人Twist1/Vimentin基因甲基化检测试剂盒（荧光PCR法）", company: "江苏为真生物医药技术股份有限公司", cancer: "尿路上皮癌", sample: "尿液", target: "Twist1/Vimentin", sensitivity: "0.8593", specificity: "0.9221", accuracy: "0.9058", report: "无" },
+            { id: 6, date: "2025.01", name: "GNB4和Riplet基因甲基化联合检测试剂盒（荧光PCR法）", company: "武汉艾米森生命科技有限公司", cancer: "肝癌", sample: "血浆", target: "GNB4/Riplet", sensitivity: "0.9233", specificity: "0.9335", accuracy: "", report: "无" },
+            { id: 7, date: "2025.01", name: "人CDO1/AJAP1/GALR1基因甲基化检测试剂盒（荧光PCR法）", company: "武汉凯德维斯生物技术有限公司", cancer: "子宫内膜癌", sample: "宫颈脱落细胞", target: "CDO1/AJAP1/GALR1", sensitivity: "0.9227", specificity: "0.919", accuracy: "", report: "有" },
+            { id: 8, date: "2025.01", name: "KCNA3和OTOP2基因甲基化联合检测试剂盒（荧光PCR法）", company: "武汉艾米森生命科技有限公司", cancer: "食管癌", sample: "血浆", target: "KCNA3/OTOP2", sensitivity: "0.8714", specificity: "0.9298", accuracy: "", report: "无" },
+            { id: 9, date: "2024.12", name: "人CDO1和CELF4基因甲基化检测试剂盒（PCR-荧光探针法）", company: "北京起源聚禾生物科技有限公司", cancer: "子宫内膜癌", sample: "宫颈脱落细胞", target: "CDO1/CELF4", sensitivity: "0.9451", specificity: "0.9416", accuracy: "", report: "有" },
+            { id: 10, date: "2024.11", name: "人FGFR3/TERT基因突变及ONECUT2/VIM基因甲基化联合检测试剂盒（PCR荧光探针法）", company: "天津橡鑫医疗器械有限公司", cancer: "尿路上皮癌", sample: "尿液", target: "FGFR3/TERT/ONECUT2/VIM", sensitivity: "0.925", specificity: "0.958", accuracy: "", report: "无" },
+            { id: 11, date: "2024.11", name: "人SHOX2/PTGER4基因甲基化检测试剂盒（PCR荧光法）", company: "安徽安龙基因科技有限公司", cancer: "肺癌", sample: "血浆", target: "SHOX2/PTGER4", sensitivity: "0.8643", specificity: "0.9242", accuracy: "", report: "无" },
+            { id: 12, date: "2024.09", name: "SOX1和PAX1基因甲基化检测试剂盒（PCR-荧光探针法）", company: "广州凯普医药科技有限公司", cancer: "宫颈癌（分流）", sample: "宫颈脱落细胞", target: "SOX1/PAX1", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 13, date: "2024.09", name: "NTMT1和MAP3K14-AS1基因甲基化检测试剂盒（荧光PCR法）", company: "武汉艾米森生命科技有限公司", cancer: "结直肠癌", sample: "血浆", target: "NTMT1/MAP3K14-AS1", sensitivity: "0.9142", specificity: "0.9174", accuracy: "", report: "无" },
+            { id: 14, date: "2024.08", name: "MT-1A、Epo及Septin9基因甲基化检测试剂盒（PCR荧光探针法）", company: "博尔诚（北京）科技有限公司", cancer: "食管癌", sample: "血浆", target: "MT-1A/Epo/Septin9", sensitivity: "0.855", specificity: "0.936", accuracy: "", report: "有" },
+            { id: 15, date: "2024.08", name: "SDC2/NDRG4基因甲基化检测试剂盒（PCR-荧光探针法）", company: "长沙人和未来医疗器械有限公司", cancer: "结直肠癌", sample: "粪便", target: "SDC2/NDRG4", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 16, date: "2024.05", name: "人Septin9、BCAT1、IKZF1、BCAN、VAV3基因甲基化联合检测试剂盒（PCR-荧光探针法）", company: "上海鹍远健康科技有限公司", cancer: "结直肠癌", sample: "血浆", target: "Septin9/BCAT1/IKZF1/BCAN/VAV3", sensitivity: "0.873", specificity: "0.911", accuracy: "", report: "有" },
+            { id: 17, date: "2024.04", name: "Reprimo/SDC2/TCF4基因甲基化检测试剂盒（PCR-荧光探针法）", company: "北京艾克伦医疗科技有限公司", cancer: "胃癌", sample: "血浆", target: "Reprimo/SDC2/TCF4", sensitivity: "0.8077", specificity: "0.9207", accuracy: "0.8852", report: "有" },
+            { id: 18, date: "2024.02", name: "IFI44L基因甲基化检测试剂盒（PCR-熔解曲线法）", company: "深圳市赛尔生物技术有限公司", cancer: "系统性红斑狼疮", sample: "外周血", target: "IFI44L", sensitivity: "0.9053", specificity: "0.9256", accuracy: "", report: "有" },
+            { id: 19, date: "2024.01", name: "人类ONECUT2/VIM基因甲基化检测试剂盒（荧光PCR法）", company: "广州市基准医疗有限责任公司", cancer: "尿路上皮癌", sample: "尿液", target: "ONECUT2/VIM", sensitivity: "0.8974", specificity: "0.9146", accuracy: "0.9147", report: "有" },
+            { id: 20, date: "2023.02", name: "Septin9基因甲基化检测试剂盒（PCR荧光探针法）", company: "深圳市优圣康生物科技有限公司", cancer: "结直肠癌", sample: "血浆", target: "Septin9", sensitivity: "0.7734", specificity: "0.9595", accuracy: "", report: "无" },
+            { id: 21, date: "2023.03", name: "人PAX1和JAM3基因甲基化检测试剂盒(PCR-荧光探针法)", company: "北京起源聚禾生物科技有限公司", cancer: "宫颈癌（分流）", sample: "宫颈脱落细胞", target: "PAX1/JAM3", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 22, date: "2023.06", name: "BMPR1A/PLAC8基因甲基化检测试剂盒（数字PCR法）", company: "广州优泽生物技术有限公司", cancer: "肝癌", sample: "血清", target: "BMPR1A/PLAC8", sensitivity: "0.9542", specificity: "0.9602", accuracy: "", report: "有" },
+            { id: 23, date: "2023.07", name: "PAX1基因甲基化检测试剂盒（PCR-荧光探针法）", company: "湖南宏雅基因技术有限公司", cancer: "宫颈癌（分流）", sample: "宫颈脱落细胞", target: "PAX1", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 24, date: "2023.07", name: "人SDC2、NPY、FGF5、PDX1基因甲基化检测试剂盒（荧光PCR法）", company: "安徽达健医学科技有限公司", cancer: "结直肠癌", sample: "粪便", target: "SDC2/NPY/FGF5/PDX1", sensitivity: "0.9117", specificity: "0.9112", accuracy: "", report: "有" },
+            { id: 25, date: "2023.12", name: "人SDC2、ADHFE1、PPP2R5C基因甲基化联合检测试剂盒（荧光PCR法）", company: "华大数极生物科技（深圳）有限公司", cancer: "结直肠癌", sample: "粪便", target: "SDC2/ADHFE1/PPP2R5C", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 26, date: "2022.11", name: "Septin9/SDC2/BCAT1基因甲基化检测试剂盒（PCR-荧光探针法）", company: "北京艾克伦医疗科技有限公司", cancer: "结直肠癌", sample: "血浆", target: "Septin9/SDC2/BCAT1", sensitivity: "0.8475", specificity: "0.9422", accuracy: "", report: "有" },
+            { id: 27, date: "2022.09", name: "人Twist1基因甲基化检测试剂盒（荧光PCR法）", company: "安徽达健医学科技有限公司", cancer: "膀胱癌", sample: "尿液", target: "Twist1", sensitivity: "0.882", specificity: "0.868", accuracy: "0.872", report: "有" },
+            { id: 28, date: "2022.08", name: "人ASTN1、DLX1、ITGA4、RXFP3、SOX17、ZNF671基因甲基化检测试剂盒（荧光PCR法）", company: "上海捷诺生物科技有限公司", cancer: "宫颈癌（分流）", sample: "宫颈脱落细胞", target: "ASTN1/DLX1/ITGA4/RXFP3/SOX17/ZNF671", sensitivity: "", specificity: "", accuracy: "", report: "有" },
+            { id: 29, date: "2022.05", name: "人类SFRP2和SDC2基因甲基化联合检测试剂盒（荧光PCR法）", company: "上海锐翌生物科技有限公司", cancer: "结直肠癌", sample: "粪便", target: "SFRP2/SDC2", sensitivity: "0.922", specificity: "0.919", accuracy: "0.919", report: "有" },
+            { id: 30, date: "2022.03", name: "SDC2和TFPI2基因甲基化联合检测试剂盒（荧光PCR法）", company: "武汉艾米森生命科技有限公司", cancer: "结直肠癌", sample: "粪便", target: "SDC2/TFPI2", sensitivity: "0.953", specificity: "0.903", accuracy: "", report: "有" },
+            { id: 31, date: "2022.02", name: "SHOX2/RASSF1A/PTGER4基因甲基化检测试剂盒（PCR-荧光探针法）", company: "北京艾克伦医疗科技有限公司", cancer: "肺癌", sample: "血浆", target: "SHOX2/RASSF1A/PTGER4", sensitivity: "0.8683", specificity: "0.9559", accuracy: "0.9233", report: "有" },
+            { id: 32, date: "2021.01", name: "人类SDC2基因甲基化检测试剂盒（荧光PCR法）", company: "厦门艾德生物医药科技股份有限公司", cancer: "结直肠癌", sample: "粪便", target: "SDC2", sensitivity: "0.8632", specificity: "0.9299", accuracy: "", report: "无" },
+            { id: 33, date: "2020.04", name: "RNF180/Septin9基因甲基化检测试剂盒（PCR荧光探针法）", company: "博尔诚（北京）科技有限公司", cancer: "胃癌", sample: "血浆", target: "RNF180/Septin9", sensitivity: "0.6176", specificity: "0.8507", accuracy: "", report: "有" },
+            { id: 34, date: "2020.11", name: "KRAS基因突变及BMP3/NDRG4基因甲基化和便隐血联合检测试剂盒（PCR荧光探针法-胶体金法)", company: "杭州诺辉健康科技有限公司", cancer: "结直肠癌", sample: "粪便", target: "KRAS突变/BMP3/NDRG4", sensitivity: "0.9194", specificity: "0.8708", accuracy: "", report: "有" },
+            { id: 35, date: "2019.05", name: "人Septin9基因甲基化DNA检测试剂盒（PCR荧光法）", company: "上海透景生命科技股份有限公司", cancer: "结直肠癌", sample: "血浆", target: "Septin9", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 36, date: "2019.02", name: "人类MGMT基因甲基化检测试剂盒（荧光PCR法）", company: "基因科技（上海）股份有限公司", cancer: "胶质瘤（用药指导）", sample: "石蜡切片", target: "MGMT", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 37, date: "2018.03", name: "人septin9基因甲基化检测试剂盒（荧光PCR法）", company: "为真生物医药科技有限公司", cancer: "结直肠癌", sample: "血浆", target: "Septin9", sensitivity: "0.7645", specificity: "0.9032", accuracy: "0.8421", report: "无" },
+            { id: 38, date: "2018.11", name: "人类SDC2基因甲基化检测试剂盒（荧光PCR法）", company: "广州市康立明生物科技有限责任公司", cancer: "结直肠癌", sample: "粪便", target: "SDC2", sensitivity: "0.8422", specificity: "0.9785", accuracy: "0.9365", report: "有" },
+            { id: 39, date: "2017.11", name: "人SHOX2、RASSF1A基因甲基化DNA检测试剂盒（PCR荧光法）", company: "上海透景生命科技股份有限公司", cancer: "肺癌", sample: "肺泡灌洗液", target: "SHOX2/RASSF1A", sensitivity: "", specificity: "", accuracy: "", report: "无" },
+            { id: 40, date: "2015", name: "Septin9基因甲基化检测试剂盒（PCR荧光探针法）", company: "博尔诚（北京）科技有限公司", cancer: "结直肠癌", sample: "血浆", target: "Septin9", sensitivity: "0.7663", specificity: "0.9593", accuracy: "", report: "无" },
+            { id: 41, date: "2017.08", name: "7种微小核糖核酸（microRNA）检测试剂盒（PCR荧光探针法）", company: "骏实生物科技（上海）有限公司", cancer: "肝癌", sample: "血浆", target: "miR-21/miR-26a/miR-27a/miR-122/miR-192/miR-223/miR-801", sensitivity: "0.741", specificity: "0.734", accuracy: "", report: "无" },
+            { id: 42, date: "2025.07", name: "4种微小核糖核酸（microRNA）检测试剂盒（PCR荧光探针法）", company: "康德（深圳）生物技术有限公司", cancer: "胰腺癌", sample: "血清", target: "miR-132/miR-30c/miR-24/miR-23a", sensitivity: "0.9491", specificity: "0.9712", accuracy: "", report: "有" },
+            { id: 43, date: "2018.03", name: "miR-92a检测试剂盒（荧光RT-PCR法）", company: "深圳市晋百慧生物有限公司", cancer: "结直肠癌", sample: "粪便", target: "miR-92a", sensitivity: "0.7176", specificity: "0.9023", accuracy: "", report: "有" },
+            { id: 44, date: "2015", name: "微小核糖核酸（microRNA-25）检测试剂盒（荧光PCR法）", company: "江苏命码生物科技有限公司", cancer: "胰腺癌", sample: "血清", target: "miR-25", sensitivity: "0.76", specificity: "0.93", accuracy: "0.88", report: "无" }
+        ];
+
+        // 分页相关变量
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let filteredData = [...tableData];
+        let cancerChart = null;
+        let yearChart = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化页面
+            renderTable();
+            setupPagination();
+            setupFilters();
+            renderCharts();
+        });
+
+        // 渲染表格
+        function renderTable() {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = filteredData.slice(start, end);
+            
+            paginatedData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.date}</td>
+                    <td>${item.name}</td>
+                    <td class="tooltip-cell" data-fullname="${item.company}">
+                        <span class="company-name">${item.company}</span>
+                    </td>
+                    <td><span class="badge badge-cancer">${item.cancer}</span></td>
+                    <td><span class="badge badge-sample">${item.sample}</span></td>
+                    <td>${item.target}</td>
+                    <td>${item.sensitivity}</td>
+                    <td>${item.specificity}</td>
+                    <td>${item.accuracy}</td>
+                    <td><span class="badge ${item.report === '有' ? 'bg-success' : 'bg-secondary'}">${item.report}</span></td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // 更新分页信息
+            updatePaginationInfo();
+        }
+
+        // 设置分页
+        function setupPagination() {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            const pagination = document.getElementById('pagination');
+            const prevPage = document.getElementById('prevPage');
+            const nextPage = document.getElementById('nextPage');
+            
+            // 清空页码（保留上一页和下一页）
+            const pageNumbers = pagination.querySelectorAll('.page-number');
+            pageNumbers.forEach(el => el.remove());
+            
+            // 添加页码
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.className = `page-item page-number ${i === currentPage ? 'active' : ''}`;
+                pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                
+                // 插入到下一页按钮之前
+                pagination.insertBefore(pageItem, nextPage);
+            }
+            
+            // 更新上一页/下一页状态
+            prevPage.classList.toggle('disabled', currentPage === 1);
+            nextPage.classList.toggle('disabled', currentPage === totalPages || totalPages === 0);
+            
+            // 添加页码点击事件
+            document.querySelectorAll('.page-number').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentPage = parseInt(this.textContent);
+                    renderTable();
+                    setupPagination();
+                });
+            });
+            
+            // 上一页点击事件
+            prevPage.addEventListener('click', function(e) {
+                if (currentPage > 1) {
+                    e.preventDefault();
+                    currentPage--;
+                    renderTable();
+                    setupPagination();
+                }
+            });
+            
+            // 下一页点击事件
+            nextPage.addEventListener('click', function(e) {
+                const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+                if (currentPage < totalPages) {
+                    e.preventDefault();
+                    currentPage++;
+                    renderTable();
+                    setupPagination();
+                }
+            });
+        }
+
+        // 更新分页信息
+        function updatePaginationInfo() {
+            const start = (currentPage - 1) * rowsPerPage + 1;
+            const end = Math.min(start + rowsPerPage - 1, filteredData.length);
+            const total = filteredData.length;
+            
+            document.getElementById('paginationInfo').textContent = 
+                total > 0 ? `显示 ${start}-${end} 条，共 ${total} 条` : "没有找到匹配的数据";
+                
+            // 更新结果计数
+            document.getElementById('resultCount').textContent = total;
+        }
+
+        // 设置筛选功能
+        function setupFilters() {
+            const yearFilter = document.getElementById('yearFilter');
+            const cancerFilter = document.getElementById('cancerFilter');
+            const sampleFilter = document.getElementById('sampleFilter');
+            const companyFilter = document.getElementById('companyFilter');
+            const resetButton = document.getElementById('resetFilters');
+            
+            // 筛选函数
+            function applyFilters() {
+                filteredData = tableData.filter(item => {
+                    const yearMatch = !yearFilter.value || item.date.includes(yearFilter.value);
+                    const cancerMatch = !cancerFilter.value || item.cancer.includes(cancerFilter.value);
+                    const sampleMatch = !sampleFilter.value || item.sample.includes(sampleFilter.value);
+                    const companyMatch = !companyFilter.value || item.company.toLowerCase().includes(companyFilter.value.toLowerCase());
+                    
+                    return yearMatch && cancerMatch && sampleMatch && companyMatch;
+                });
+                
+                // 重置到第一页
+                currentPage = 1;
+                renderTable();
+                setupPagination();
+            }
+            
+            // 添加事件监听
+            yearFilter.addEventListener('change', applyFilters);
+            cancerFilter.addEventListener('change', applyFilters);
+            sampleFilter.addEventListener('change', applyFilters);
+            companyFilter.addEventListener('input', applyFilters);
+            
+            // 重置筛选
+            resetButton.addEventListener('click', function() {
+                yearFilter.value = '';
+                cancerFilter.value = '';
+                sampleFilter.value = '';
+                companyFilter.value = '';
+                applyFilters();
+            });
+        }
+
+        // 渲染图表
+        function renderCharts() {
+            // 癌种分布数据
+            const cancerCounts = {};
+            tableData.forEach(item => {
+                const cancer = item.cancer;
+                cancerCounts[cancer] = (cancerCounts[cancer] || 0) + 1;
+            });
+            
+            // 按数量排序并取前5个，其余归为"其他"
+            const sortedCancers = Object.entries(cancerCounts)
+                .sort((a, b) => b[1] - a[1]);
+            
+            const topCancers = sortedCancers.slice(0, 5);
+            const otherCount = sortedCancers.slice(5).reduce((sum, item) => sum + item[1], 0);
+            
+            if (otherCount > 0) {
+                topCancers.push(["其他", otherCount]);
+            }
+            
+            const cancerLabels = topCancers.map(item => item[0]);
+            const cancerData = topCancers.map(item => item[1]);
+            
+            // 年份分布数据
+            const yearCounts = {};
+            tableData.forEach(item => {
+                // 提取年份
+                const year = item.date.split('.')[0];
+                if (year) {
+                    yearCounts[year] = (yearCounts[year] || 0) + 1;
+                }
+            });
+            
+            // 确保年份按顺序排列
+            const years = ['2015', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'];
+            const yearData = years.map(year => yearCounts[year] || 0);
+            
+            // 渲染癌种分布图表
+            const cancerCtx = document.getElementById('cancerChart').getContext('2d');
+            if (cancerChart) {
+                cancerChart.destroy();
+            }
+            cancerChart = new Chart(cancerCtx, {
+                type: 'bar',
+                data: {
+                    labels: cancerLabels,
+                    datasets: [{
+                        label: '获批数量',
+                        data: cancerData,
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(201, 203, 207, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 99, 132)',
+                            'rgb(75, 192, 192)',
+                            'rgb(255, 159, 64)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 渲染年份分布图表
+            const yearCtx = document.getElementById('yearChart').getContext('2d');
+            if (yearChart) {
+                yearChart.destroy();
+            }
+            yearChart = new Chart(yearCtx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: '获批数量',
+                        data: yearData,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        pointBackgroundColor: 'rgb(75, 192, 192)',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
