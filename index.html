@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>甲基化检测试剂盒获批情况统计</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
@@ -526,28 +529,21 @@ body {
   font-size: 12px;
   color: var(--text-secondary);
 }
-.metric-bar-mini {
-  width: 50px;
-  height: 6px;
-  background: #f1f5f9;
-  border-radius: 3px;
-  overflow: hidden;
+/* Metric tags */
+.metric-tag {
   display: inline-block;
-  vertical-align: middle;
-  margin-right: 6px;
-}
-.metric-bar-mini-fill {
-  height: 100%;
-  border-radius: 3px;
-}
-.metric-bar-mini-fill.high { background: #10b981; }
-.metric-bar-mini-fill.mid { background: #f59e0b; }
-.metric-bar-mini-fill.low { background: #ef4444; }
-.metric-text {
-  font-family: "SF Mono", "Consolas", monospace;
+  padding: 3px 10px;
+  border-radius: 20px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "SF Mono", "Consolas", monospace;
+  white-space: nowrap;
 }
+.metric-tag-purple { background: #ddd6fe; color: #5b21b6; }
+.metric-tag-red { background: #fecaca; color: #991b1b; }
+.metric-tag-orange { background: #fed7aa; color: #9a3412; }
+.metric-tag-yellow { background: #fef08a; color: #854d0e; }
+.metric-cell { text-align: center; }
 .metric-na { color: var(--text-light); font-size: 12px; }
 .target-tag {
   display: inline-block;
@@ -635,8 +631,8 @@ body {
       <circle cx="44" cy="40" r="3" fill="#fff"/>
     </svg>
     <div style="text-align:left;">
-      <h1>甲基化检测试剂盒获批情况统计（含miRNA）</h1>
-      <p>NMPA甲基化检测试剂盒注册审批数据汇总</p>
+      <h1>甲基化检测试剂盒获批情况统计</h1>
+      <p>NMPA 甲基化检测试剂盒注册审批数据汇总</p>
     </div>
   </div>
   <div class="update-time" id="updateTime"></div>
@@ -891,9 +887,9 @@ const columnConfig = {
   '目标癌种': { width: '110px', badge: 'cancer' },
   '样本类型': { width: '110px' },
   '靶标': { width: '140px', tag: true },
-  '灵敏度': { width: '120px', metric: true },
-  '特异性': { width: '120px', metric: true },
-  '准确度': { width: '120px', metric: true },
+  '灵敏度': { width: '100px', metric: true, center: true },
+  '特异性': { width: '100px', metric: true, center: true },
+  '准确度': { width: '100px', metric: true, center: true },
   '审评报告': { width: '80px', badge: 'report', center: true }
 };
 
@@ -920,11 +916,15 @@ function renderTable(pageData) {
 
       if (cfg.metric) {
         if (val != null && typeof val === 'number') {
-          const pct = Math.round(val * 100);
-          const cls = pct >= 90 ? 'high' : pct >= 80 ? 'mid' : 'low';
-          bodyHtml += `<td${center}><span class="metric-bar-mini"><span class="metric-bar-mini-fill ${cls}" style="width:${pct}%"></span></span><span class="metric-text">${(val*100).toFixed(1)}%</span></td>`;
+          const pct = val * 100;
+          let tagCls = '';
+          if (pct > 90) tagCls = 'metric-tag-purple';
+          else if (pct >= 80) tagCls = 'metric-tag-red';
+          else if (pct >= 70) tagCls = 'metric-tag-orange';
+          else tagCls = 'metric-tag-yellow';
+          bodyHtml += `<td class="metric-cell"><span class="metric-tag ${tagCls}">${pct.toFixed(1)}%</span></td>`;
         } else {
-          bodyHtml += `<td${center}><span class="metric-na">—</span></td>`;
+          bodyHtml += `<td class="metric-cell"><span class="metric-na">—</span></td>`;
         }
       } else if (cfg.badge === 'cancer') {
         bodyHtml += `<td><span class="badge badge-cancer">${val || '—'}</span></td>`;
